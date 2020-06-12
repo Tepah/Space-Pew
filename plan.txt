@@ -1,0 +1,5 @@
+Make a game similar to space invaders.
+
+The game will have:
+# Controlable rocket ship on the bottom
+# 
