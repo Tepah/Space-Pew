@@ -32,6 +32,7 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
     
     def _check_events(self):
@@ -57,7 +58,7 @@ class AlienInvasion:
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
         elif event.key == pygame.K_k:
-            self._fire_bullet()
+            ship._fire_bullet()
         
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
@@ -86,6 +87,10 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
+    def _update_aliens(self):
+        """Update the position of the aliens in the fleet"""
+        self.aliens.update()
+
     def _create_fleet(self):
         """Create a fleet of aliens"""
         # Make an Alien.
@@ -100,7 +105,7 @@ class AlienInvasion:
         ship_height = self.ship.rect.height
         available_space_y = (self.settings.screen_height - \
             (3 * alien_height) - ship_height)
-        number_rows = available_space_y // (2 * alien_height)
+        number_rows = available_space_y // (3 * alien_height)
 
         # Create the full fleet of aliens.
         for row_number in range(number_rows):
