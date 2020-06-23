@@ -88,8 +88,11 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
 
     def _update_aliens(self):
-        """Update the position of the aliens in the fleet"""
+        """Check if the fleet is at the edge, then
+        Update the position of the aliens in the fleet"""
+        self._check_fleet_edges()
         self.aliens.update()
+
 
     def _create_fleet(self):
         """Create a fleet of aliens"""
