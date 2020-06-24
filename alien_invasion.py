@@ -59,6 +59,8 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_k:
             self._fire_bullet()
+        elif event.key == pygame.K_EQUALS:
+            self.settings.god_bullet()
         
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
@@ -66,7 +68,7 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
-    def _check_keyup_events(self,event):
+    def _check_keyup_events(self, event):
         """Responds to Key releasing"""
         if event.key == pygame.K_d:
             self.ship.moving_right = False
@@ -86,6 +88,21 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+
+        self._check_bullet_alien_collisions()
+
+    def _check_bullet_alien_collisions(self):
+        # Check for any bullets that have hit aliens.
+        # If so, get rid of the bullet and the alien.
+        collisions = pygame.sprite.groupcollide(\
+            self.bullets, self.aliens, (not self.settings.god_bullet_on), \
+                True)
+        
+        # Checks if aliens are all dead
+        if not self.aliens:
+            # Destroy existing bullets and create a new fleet.
+            self.bullets.empty()
+            self._create_fleet()
 
     def _update_aliens(self):
         """Check if the fleet is at the edge, then
