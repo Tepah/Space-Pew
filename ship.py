@@ -16,6 +16,8 @@ class Ship:
 
         # Start each new ship at the bottom center of the screen.
         self.rect.midbottom = self.screen_rect.midbottom
+        self.spawn_position = self.rect.y - self.rect.height
+        self.rect.y += self.rect.height * 2
 
         # Store a decimal value for the ship's horizontal positon.
         self.x = float(self.rect.x)
@@ -48,3 +50,18 @@ class Ship:
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect)
 
+    def ship_spawn(self):
+        """Spawns the ship and moves it to center"""
+        # Centers the ship on the screen
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.rect.y += self.rect.height * 2
+
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
+
+        self.settings.ship_speed /= 2
+        self.moving_up = True
+        while self.rect.y != self.spawn_position:
+            self.update()
+        self.moving_up = False
+        self.settings.ship_speed *= 2
