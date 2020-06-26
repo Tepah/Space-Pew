@@ -1,5 +1,5 @@
 class GameStats:
-    """Track statistics for Alien Invasion."""
+    """Track statistics for Space Pew."""
 
     def __init__(self, ai_game):
         """Initialize statistics."""
@@ -9,4 +9,7 @@ class GameStats:
     def reset_stats(self):
         """Initialize statistics that can change during the game."""
         self.ships_left = self.settings.ship_limit
+
+        # Start Space pew in an inactive state
+        self.game_active = False
         
