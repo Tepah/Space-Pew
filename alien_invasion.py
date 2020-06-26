@@ -84,14 +84,12 @@ class AlienInvasion:
             self.settings.initialize_dynamic_settings()
             self._start_game()
             self.stats.difficulty_menu = False
-            self.sb.prep_score()
         elif self.hard_button.rect.collidepoint(mouse_pos):
             # Starts game in HARD MODE
             self.settings.initialize_dynamic_settings()
             self.settings.hard_mode_settings()
             self._start_game()
             self.stats.difficulty_menu = False
-            self.sb.prep_score()
 
     def _start_game(self):
         # Reset the game statistics.
@@ -105,6 +103,9 @@ class AlienInvasion:
         # Create a new flseet and center the ship.
         self._create_fleet()
         self.ship.ship_spawn()
+        
+        self.sb.prep_score()
+        self.sb.prep_level()
 
         # Hide the mouse cursor.
         pygame.mouse.set_visible(False)
@@ -177,6 +178,10 @@ class AlienInvasion:
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+
+            # Increase level.
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _update_aliens(self):
         """Check if the fleet is at the edge, then
