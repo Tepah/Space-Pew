@@ -83,11 +83,15 @@ class AlienInvasion:
             # Reset the game settings.
             self.settings.initialize_dynamic_settings()
             self._start_game()
+            self.stats.difficulty_menu = False
+            self.sb.prep_score()
         elif self.hard_button.rect.collidepoint(mouse_pos):
             # Starts game in HARD MODE
             self.settings.initialize_dynamic_settings()
             self.settings.hard_mode_settings()
             self._start_game()
+            self.stats.difficulty_menu = False
+            self.sb.prep_score()
 
     def _start_game(self):
         # Reset the game statistics.
@@ -160,6 +164,12 @@ class AlienInvasion:
         collisions = pygame.sprite.groupcollide(\
             self.bullets, self.aliens, (not self.settings.god_bullet_on), \
                 True)
+
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+            self.sb.check_high_score()
         
         # Checks if aliens are all dead
         if not self.aliens:
