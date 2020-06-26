@@ -1,3 +1,5 @@
+"""A minimalistic bullet hell"""
+
 import sys
 from time import sleep
 
@@ -11,7 +13,7 @@ from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
 
-class AlienInvasion:
+class SpacePew:
     """Overall class to manage game assets and behavior."""
 
     def __init__(self):
@@ -293,6 +295,6 @@ class AlienInvasion:
 
 if __name__ == "__main__":
     # Make a game instance, and run the game.
-    ai = AlienInvasion()
-    ai.run_game()
+    sp = SpacePew()
+    sp.run_game()
 

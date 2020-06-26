@@ -1,5 +1,7 @@
+"""Setting class to store settings."""
+
 class Settings:
-    """Class storing all settings for AI"""
+    """Class storing all settings for SP"""
 
     def __init__(self):
         """Initializing the game's static settings"""
