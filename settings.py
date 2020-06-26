@@ -37,11 +37,16 @@ class Settings:
     def initialize_dynamic_settings(self):
         """Initialize settings that change throughout the game."""
         self.ship_speed = .75
-        self.bullet_speed = 1.5
+        self.bullet_speed = 2
         self.alien_speed = .2
 
         # fleet_direction of 1 represents right; -1 represents left
         self.fleet_direction = 1
+
+    def hard_mode_settings(self):
+        """Change values to represent a harder mode."""
+        self.alien_speed *= 2
+        self.speedup_scale = 1.2
 
     def increase_speed(self):
         """Increase speed settings."""

@@ -12,4 +12,4 @@ class GameStats:
 
         # Start Space pew in an inactive state
         self.game_active = False
-        
+        self.difficulty_menu = False

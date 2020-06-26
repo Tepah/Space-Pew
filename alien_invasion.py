@@ -35,6 +35,10 @@ class AlienInvasion:
         # Make the Play button.
         self.play_button = Button(self, "Play")
 
+        # Make the Normal and Hard Difficulty buttons.
+        self.normal_button = Button(self, "Peewee")
+        self.hard_button = Button(self, "REAL PP")
+
     def run_game(self):
         """Start the main loop for the game."""
         while True:
@@ -61,12 +65,28 @@ class AlienInvasion:
                 self._check_keyup_events(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
-                self._check_play_button(mouse_pos)
+                if not self.stats.game_active \
+                    and not self.stats.difficulty_menu:
+                    self._check_play_button(mouse_pos)
+                elif self.stats.difficulty_menu:
+                    self._check_difficulty_menu(mouse_pos)
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when a player clicks Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
-        if button_clicked and not self.stats.game_active:
+        if button_clicked:
+            # Shows the difficulty buttons
+            self.stats.difficulty_menu = True
+            
+    def _check_difficulty_menu(self, mouse_pos):
+        if self.normal_button.rect.collidepoint(mouse_pos):
+            # Reset the game settings.
+            self.settings.initialize_dynamic_settings()
+            self._start_game()
+        elif self.hard_button.rect.collidepoint(mouse_pos):
+            # Starts game in HARD MODE
+            self.settings.initialize_dynamic_settings()
+            self.settings.hard_mode_settings()
             self._start_game()
 
     def _start_game(self):
@@ -244,8 +264,12 @@ class AlienInvasion:
         self.aliens.draw(self.screen)
 
         # Draw the play button if the game is inactive.
-        if not self.stats.game_active:
-            self.play_button.draw_button()
+        if not self.stats.game_active and not self.stats.difficulty_menu:
+            self.play_button.draw_play_button()
+        elif self.stats.difficulty_menu and not self.stats.game_active:
+            # Draws the difficulty buttons
+            self.normal_button.draw_button(0, -60)
+            self.hard_button.draw_button(0, 60)
 
         pygame.display.flip()
 
