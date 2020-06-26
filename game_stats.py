@@ -9,7 +9,10 @@ class GameStats:
     def reset_stats(self):
         """Initialize statistics that can change during the game."""
         self.ships_left = self.settings.ship_limit
+        self.score = 0
 
         # Start Space pew in an inactive state
         self.game_active = False
         self.difficulty_menu = False
+
+    
