@@ -25,6 +25,12 @@ class Settings:
 
         # How quickly the alien point values increase
         self.score_scale = 1.5
+        
+        # Wind settings
+        self.wind_height, self.wind_width = 80, 1
+        self.wind_speed = 1
+        self.wind_limit = 5
+        self.wind_counter = 0
 
         self.initialize_dynamic_settings()
 
@@ -35,6 +41,7 @@ class Settings:
             self.default_bullet()
             self.god_switch *= -1
 
+# Different Bullet Types
     def default_bullet(self):
         """Changes bullets to default bullets"""
         self.bullet_width = 5
@@ -42,6 +49,7 @@ class Settings:
         self.bullet_color = (255, 255, 255)
         self.bullets_allowed = 5
         self.bullet_counter = 0
+        self.bullet_damage = 10
         self.god_switch = -1
 
     def god_bullet(self):
@@ -49,6 +57,7 @@ class Settings:
         self.bullet_speed = 5
         self.bullet_width = 40
         self.bullet_height = 100
+        self.bullet_damage = 99999
         self.god_switch *= -1
 
     def initialize_dynamic_settings(self):

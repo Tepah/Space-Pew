@@ -12,6 +12,7 @@ from alien import Alien
 from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
+from wind import Wind
 
 class SpacePew:
     """Overall class to manage game assets and behavior."""
@@ -33,6 +34,7 @@ class SpacePew:
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+        self.wind = pygame.sprite.Group()
 
         # Make the Play button.
         self.play_button = Button(self, "Play")
@@ -55,6 +57,8 @@ class SpacePew:
                     self.ship.ship_spawn()
                     self.settings.spawn_ship = False
 
+            self._blow_wind()
+            self._update_wind()
             self._update_screen()
     
     def _check_events(self):
@@ -143,10 +147,17 @@ class SpacePew:
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed and \
-            self.ship.is_shooting and self.settings.bullet_counter % 60 == 0:
+            self.ship.is_shooting and self.settings.bullet_counter % 100 == 0:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
         self.settings.bullet_counter += 1
+
+    def _blow_wind(self):
+        if len(self.wind) < self.settings.wind_limit and \
+            self.settings.wind_counter % 300 == 0:
+            new_wind = Wind(self)
+            self.wind.add(new_wind)
+        self.settings.wind_counter += 1
 
     def _check_keyup_events(self, event):
         """Responds to Key releasing"""
@@ -207,6 +218,15 @@ class SpacePew:
 
         # Look for aliens hitting the bottom of the screen.
         self._check_alien_bottom()
+    
+    def _update_wind(self):
+        """Update the position of the wind particles and gets rid of them"""
+        self.wind.update()
+
+        # Get rid of the wind that disappear
+        for air in self.wind.copy():
+            if air.rect.top > self.settings.screen_height:
+                self.wind.remove(air)
 
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
@@ -286,6 +306,8 @@ class SpacePew:
     def _update_screen(self):
         """Update images on screen and flips to new screen"""
         self.screen.fill(self.settings.bg_color)
+        for air in self.wind.sprites():
+            air.draw_wind()
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
