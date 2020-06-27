@@ -1,3 +1,5 @@
+"""Stores all the stats the game uses"""
+
 import json
 
 class GameStats:

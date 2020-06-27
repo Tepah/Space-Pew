@@ -1,3 +1,5 @@
+"""Implements all the top hud elements."""
+
 import pygame.font
 from pygame.sprite import Group
 import json
@@ -19,12 +21,9 @@ class Scoreboard:
         self.text_color = (200, 200, 200)
         self.font = pygame.font.SysFont(None, 48)
 
-        # Prepare the initial score image.
-        self.prep_score()
-        self.prep_high_score()
-        self.prep_level()
-        self.prep_ships()
-
+        # Prepares the hud values
+        self.prep_images()
+    
     def check_high_score(self):
         """check to see if there's a new high score."""
         if self.stats.score > self.stats.high_score:
@@ -32,6 +31,13 @@ class Scoreboard:
             self.prep_high_score()
             with open('info.json', 'w') as f:
                 json.dump(self.stats.high_score, f)
+
+    def prep_images(self):
+        """Prepare the initial score image."""
+        self.prep_score()
+        self.prep_high_score()
+        self.prep_level()
+        self.prep_ships()
 
     def prep_score(self):
         """Turn the score into a rendered image."""

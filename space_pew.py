@@ -48,6 +48,7 @@ class SpacePew:
 
             if self.stats.game_active:
                 self.ship.update()
+                self._fire_bullet()
                 self._update_bullets()
                 self._update_aliens()
                 if self.settings.spawn_ship:
@@ -126,18 +127,26 @@ class SpacePew:
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
         elif event.key == pygame.K_k:
-            self._fire_bullet()
+            self._continue_shooting()
         elif event.key == pygame.K_EQUALS:
-            self.settings.god_bullet()
+            self.settings.switch_god_bullet()
         elif event.key == pygame.K_p:
             if not self.stats.game_active:
                 self._start_game()
         
+    def _continue_shooting(self):
+        if not self.ship.is_shooting:
+            self.ship.is_shooting = True
+        else:
+            self.ship.is_shooting = False
+        
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
-        if len(self.bullets) < self.settings.bullets_allowed:
+        if len(self.bullets) < self.settings.bullets_allowed and \
+            self.ship.is_shooting and self.settings.bullet_counter % 60 == 0:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+        self.settings.bullet_counter += 1
 
     def _check_keyup_events(self, event):
         """Responds to Key releasing"""
@@ -166,7 +175,7 @@ class SpacePew:
         # Check for any bullets that have hit aliens.
         # If so, get rid of the bullet and the alien.
         collisions = pygame.sprite.groupcollide(\
-            self.bullets, self.aliens, (not self.settings.god_bullet_on), \
+            self.bullets, self.aliens, (self.settings.god_switch == -1), \
                 True)
 
         if collisions:

@@ -15,11 +15,7 @@ class Settings:
         self.spawn_ship = True
 
         # Bullet settings:
-        self.bullet_width = 5
-        self.bullet_height = 35
-        self.bullet_color = (255, 255, 255)
-        self.bullets_allowed = 7
-        self.god_bullet_on = False
+        self.default_bullet()
 
         # Alien settings:
         self.fleet_drop_speed = 10
@@ -32,17 +28,33 @@ class Settings:
 
         self.initialize_dynamic_settings()
 
+    def switch_god_bullet(self):
+        if self.god_switch is -1:
+            self.god_bullet()
+        elif self.god_switch is 1:
+            self.default_bullet()
+            self.god_switch *= -1
+
+    def default_bullet(self):
+        """Changes bullets to default bullets"""
+        self.bullet_width = 5
+        self.bullet_height = 35
+        self.bullet_color = (255, 255, 255)
+        self.bullets_allowed = 5
+        self.bullet_counter = 0
+        self.god_switch = -1
+
     def god_bullet(self):
         """Changes bullets to GOD BULLETS"""
         self.bullet_speed = 5
         self.bullet_width = 40
         self.bullet_height = 100
-        self.god_bullet_on = True
+        self.god_switch *= -1
 
     def initialize_dynamic_settings(self):
         """Initialize settings that change throughout the game."""
         self.ship_speed = .75
-        self.bullet_speed = 2
+        self.bullet_speed = 1
         self.alien_speed = .2
 
         # fleet_direction of 1 represents right; -1 represents left

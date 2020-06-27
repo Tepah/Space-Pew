@@ -30,6 +30,9 @@ class Ship(Sprite):
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
+        
+        # Determines if the ship is shooting
+        self.is_shooting = False
 
     def update(self):
         """Update the ship's position based on the movement flag."""
