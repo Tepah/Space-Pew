@@ -1,3 +1,5 @@
+"""The bullets that the player shoots"""
+
 import pygame
 from pygame.sprite import Sprite
 
