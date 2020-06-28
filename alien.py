@@ -1,14 +1,16 @@
+"""The Enemies of the game"""
+
 import pygame
 from pygame.sprite import Sprite
 
 class Alien(Sprite):
     """A Class to represent a single alien in the fleet."""
     
-    def __init__(self, ai_game):
+    def __init__(self, sp_game):
         """Initialize the alien and set its starting position."""
         super().__init__()
-        self.screen = ai_game.screen
-        self.settings = ai_game.settings
+        self.screen = sp_game.screen
+        self.settings = sp_game.settings
 
         # Load the alien image and set its rect attribute
         self.image = pygame.image.load("images/ufo.bmp")

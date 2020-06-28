@@ -1,9 +1,11 @@
 """A minimalistic bullet hell"""
 
+# TODO: Add a limiting FPS
 import sys
 from time import sleep
 
 import pygame
+from random import randint
 
 from settings import Settings
 from ship import Ship
@@ -13,6 +15,7 @@ from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
 from wind import Wind
+from drops import Drops
 
 class SpacePew:
     """Overall class to manage game assets and behavior."""
@@ -35,6 +38,7 @@ class SpacePew:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self.wind = pygame.sprite.Group()
+        self.drops = pygame.sprite.Group()
 
         # Make the Play button.
         self.play_button = Button(self, "Play")
@@ -51,7 +55,10 @@ class SpacePew:
             if self.stats.game_active:
                 self.ship.update()
                 self._fire_bullet()
-                self._update_bullets()
+                if self.bullets:
+                    self._update_bullets()
+                if self.drops:
+                    self._update_drops()
                 self._update_aliens()
                 if self.settings.spawn_ship:
                     self.ship.ship_spawn()
@@ -182,15 +189,31 @@ class SpacePew:
 
         self._check_bullet_alien_collisions()
 
+    def _update_drops(self):
+        """Update the position of the drops and get rid of old drops"""
+        # update drop position
+        self.drops.update()
+
+        # Get rid of drops that are gone
+        for drop in self.drops.copy():
+            if drop.rect.top >= self.settings.screen_height:
+                self.drops.remove(drop)
+
     def _check_bullet_alien_collisions(self):
         # Check for any bullets that have hit aliens.
         # If so, get rid of the bullet and the alien.
         collisions = pygame.sprite.groupcollide(\
             self.bullets, self.aliens, (self.settings.god_switch == -1), \
                 True)
+        drop_determine = randint(1, 100)
 
         if collisions:
             for aliens in collisions.values():
+                if drop_determine <= 5:
+                    for alien in aliens:
+                        new_drop = Drops(self, alien)
+                        new_drop.upgrade_drop()
+                        self.drops.add(new_drop)
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
             self.sb.check_high_score()
@@ -311,6 +334,8 @@ class SpacePew:
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        for drop in self.drops.sprites():
+            drop.draw_drop()
         self.aliens.draw(self.screen)
 
         # Draw the score information.
