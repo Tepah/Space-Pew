@@ -20,6 +20,7 @@ class Settings:
 
         # Alien settings:
         self.fleet_drop_speed = 10
+        self.alien_bullet_size = 15
 
         # Drop settings:
         self.drop_size = 20
@@ -56,8 +57,9 @@ class Settings:
         self.bullet_color = (255, 255, 255)
         self.bullets_allowed = 5
         self.bullet_counter = 0
-        self.bullet_damage = 5
+        self.bullet_damage = 10
         self.bullet_pierce = 0
+        self.bullet_level = 1
         self.god_switch = -1
 
     def god_bullet(self):
@@ -66,6 +68,7 @@ class Settings:
         self.bullet_width = 40
         self.bullet_height = 100
         self.bullet_damage = 99999
+        self.bullet_pierce = 20
         self.god_switch *= -1
 
     def initialize_dynamic_settings(self):

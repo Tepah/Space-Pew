@@ -208,37 +208,52 @@ class SpacePew:
 
         if collisions:
             for bullets, aliens in collisions.items():
-                for alien in aliens:
-                    if alien.health - \
-                        bullets.settings.bullet_damage <= 0:
-                        self.aliens.remove(alien)
-                        self.stats.score += self.settings.alien_points \
-                        * len(aliens)
-                        drop_determine = randint(1, 100)
-                    else:
-                        alien.health -= \
-                            bullets.settings.bullet_damage
-                    if bullets.settings.bullet_pierce > 0:
-                        bullets.settings.bullet_pierce -= 1
-                    else: 
-                        self.bullets.remove(bullets)
-                    if drop_determine <= 5:
-                        new_drop = Drops(self, alien)
-                        new_drop.upgrade_drop()
-                        self.drops.add(new_drop)
+                self._health_deplete(aliens, bullets, drop_determine)
             self.sb.prep_score()
             self.sb.check_high_score()
         
         # Checks if aliens are all dead
-        if not self.aliens:
-            # Destroy existing bullets and create a new fleet.
-            self.bullets.empty()
-            self._create_fleet()
-            self.settings.increase_speed()
+        if not self.aliens and self.ship.rect.y >= 600:
+            self._respawn_aliens()
+            
+    def _health_deplete(self, aliens, bullets, drop_determine):
+        """
+        Checks if the alien health is depleted and deletes 
+        if health reaches 0
+        """
+        for alien in aliens:
+            if alien.health - \
+                bullets.settings.bullet_damage <= 0:
+                self.aliens.remove(alien)
+                self.stats.score += self.settings.alien_points \
+                * len(aliens)
+                drop_determine = randint(1, 100)
+            else:
+                # Lowers the health if not quite at 0
+                alien.health -= \
+                    bullets.settings.bullet_damage
+            # Checks if bullets have pierce 
+            # and how many times it can pierce
+            if bullets.settings.bullet_pierce > 0:
+                bullets.settings.bullet_pierce -= 1
+            else: 
+                # Deletes the bullet if it hits an alien with no pierce
+                self.bullets.remove(bullets)
+            # Determines the drop rate for each item.
+            if drop_determine <= 5:
+                new_drop = Drops(self, alien)
+                new_drop.upgrade_drop()
+                self.drops.add(new_drop)
+        
+    def _respawn_aliens(self):
+        """Destroy existing bullets and create a new fleet."""
+        self.bullets.empty()
+        self._create_fleet()
+        self.settings.increase_speed()
 
-            # Increase level.
-            self.stats.level += 1
-            self.sb.prep_level()
+        # Increase level.
+        self.stats.level += 1
+        self.sb.prep_level()
 
     def _update_aliens(self):
         """Check if the fleet is at the edge, then
@@ -276,6 +291,7 @@ class SpacePew:
 
             # Create a new fleet and center the ship.
             self._create_fleet()
+            self.settings.default_bullet()
 
             # Pause.
             sleep(0.5)
