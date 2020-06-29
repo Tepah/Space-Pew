@@ -12,6 +12,7 @@ class Alien(Sprite):
         self.screen = sp_game.screen
         self.settings = sp_game.settings
         self.stats = sp_game.stats
+        self.health = self.settings.alien_health
 
         # Load the alien image and set its rect attribute
         self.image = pygame.image.load("images/ufo.bmp")
@@ -40,7 +41,7 @@ class Alien(Sprite):
         self.rect.x = self.x
 
     def _set_health(self):
-        self.settings.alien_health *= self.difficulty_scale \
+        self.health *= self.difficulty_scale \
             * self.stats.level
         
     

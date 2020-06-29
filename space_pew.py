@@ -204,27 +204,28 @@ class SpacePew:
         # If so, get rid of the bullet and the alien.
         collisions = pygame.sprite.groupcollide(\
             self.bullets, self.aliens, False, False)
-        drop_determine = randint(1, 100)
+        drop_determine = 100
 
         if collisions:
             for bullets, aliens in collisions.items():
                 for alien in aliens:
-                        if alien.settings.alien_health - \
-                            bullets.settings.bullet_damage <= 0:
-                            self.aliens.remove(alien)
-                        else:
-                            alien.settings.alien_health -= \
-                                self.settings.bullet_damage
-                        if bullets.settings.bullet_pierce > 0:
-                            bullets.settings.bullet_pierce -= 1
-                        else: 
-                            self.bullets.remove(bullets)
-                if drop_determine <= 5:
-                    for alien in aliens:
+                    if alien.health - \
+                        bullets.settings.bullet_damage <= 0:
+                        self.aliens.remove(alien)
+                        self.stats.score += self.settings.alien_points \
+                        * len(aliens)
+                        drop_determine = randint(1, 100)
+                    else:
+                        alien.health -= \
+                            bullets.settings.bullet_damage
+                    if bullets.settings.bullet_pierce > 0:
+                        bullets.settings.bullet_pierce -= 1
+                    else: 
+                        self.bullets.remove(bullets)
+                    if drop_determine <= 5:
                         new_drop = Drops(self, alien)
                         new_drop.upgrade_drop()
                         self.drops.add(new_drop)
-                self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
             self.sb.check_high_score()
         

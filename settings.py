@@ -56,7 +56,7 @@ class Settings:
         self.bullet_color = (255, 255, 255)
         self.bullets_allowed = 5
         self.bullet_counter = 0
-        self.bullet_damage = 1
+        self.bullet_damage = 5
         self.bullet_pierce = 0
         self.god_switch = -1
 
@@ -72,7 +72,7 @@ class Settings:
         """Initialize settings that change throughout the game."""
         self.bullet_speed = .8
         self.alien_speed = .2
-        self.alien_health = 100
+        self.alien_health = 20
 
         # fleet_direction of 1 represents right; -1 represents left
         self.fleet_direction = 1
