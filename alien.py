@@ -11,6 +11,7 @@ class Alien(Sprite):
         super().__init__()
         self.screen = sp_game.screen
         self.settings = sp_game.settings
+        self.stats = sp_game.stats
 
         # Load the alien image and set its rect attribute
         self.image = pygame.image.load("images/ufo.bmp")
@@ -19,6 +20,9 @@ class Alien(Sprite):
         # Start each new alien near the top left of the screen.
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
+
+        if self.stats.level > 1:
+            self._set_health()
 
         # Store the alien's exact horizontal position.
         self.x = float(self.rect.x)
@@ -35,4 +39,8 @@ class Alien(Sprite):
             self.settings.fleet_direction)
         self.rect.x = self.x
 
+    def _set_health(self):
+        self.settings.alien_health *= self.difficulty_scale \
+            * self.stats.level
+        
     

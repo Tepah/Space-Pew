@@ -203,12 +203,22 @@ class SpacePew:
         # Check for any bullets that have hit aliens.
         # If so, get rid of the bullet and the alien.
         collisions = pygame.sprite.groupcollide(\
-            self.bullets, self.aliens, (self.settings.god_switch == -1), \
-                True)
+            self.bullets, self.aliens, False, False)
         drop_determine = randint(1, 100)
 
         if collisions:
-            for aliens in collisions.values():
+            for bullets, aliens in collisions.items():
+                for alien in aliens:
+                        if alien.settings.alien_health - \
+                            bullets.settings.bullet_damage <= 0:
+                            self.aliens.remove(alien)
+                        else:
+                            alien.settings.alien_health -= \
+                                self.settings.bullet_damage
+                        if bullets.settings.bullet_pierce > 0:
+                            bullets.settings.bullet_pierce -= 1
+                        else: 
+                            self.bullets.remove(bullets)
                 if drop_determine <= 5:
                     for alien in aliens:
                         new_drop = Drops(self, alien)

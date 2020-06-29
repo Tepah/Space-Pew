@@ -35,4 +35,3 @@ class Drops(Sprite):
         self.color = self.settings.upgrade_drop
         self.type = 'upgrade'
 
-
