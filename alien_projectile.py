@@ -22,3 +22,14 @@ class AlienProjectile(Sprite):
 
         # Store the bullet's position as a decimal
         self.y = float(self.rect.y)
+
+    def update(self):
+        """Moves projectiles down the screen"""
+        # Updates the decimal position of the projectile.
+        self.y += self.settings.alien_projectile_speed
+        # Update the rect position
+        self.rect.y = self.y
+    
+    def draw_projectile(self):
+        """Draw the projectile to the screen."""
+        pygame.draw.rect(self.screen, self.color, self.rect)

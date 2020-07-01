@@ -42,6 +42,22 @@ class Settings:
 
         self.initialize_dynamic_settings()
 
+    def initialize_dynamic_settings(self):
+        """Initialize settings that change throughout the game."""
+        self.bullet_speed = .8
+
+        # Alien dynamic variables
+        self.alien_speed = .2
+        self.alien_health = 20
+        self.alien_projectile_speed = .5
+         self.alien_projectile_limit = 3
+
+        # fleet_direction of 1 represents right; -1 represents left
+        self.fleet_direction = 1
+
+        # Scoring
+        self.alien_points = 50
+
     def switch_god_bullet(self):
         if self.god_switch is -1:
             self.god_bullet()
@@ -71,19 +87,7 @@ class Settings:
         self.bullet_pierce = 20
         self.god_switch *= -1
 
-    def initialize_dynamic_settings(self):
-        """Initialize settings that change throughout the game."""
-        self.bullet_speed = .8
-        self.alien_speed = .2
-        self.alien_health = 20
-
-        # fleet_direction of 1 represents right; -1 represents left
-        self.fleet_direction = 1
-
-        # Scoring
-        self.alien_points = 50
-
-    def hard_mode_settings(self):
+     def hard_mode_settings(self):
         """Change values to represent a harder mode."""
         self.alien_speed *= 2
         self.speedup_scale = 1.3
@@ -92,5 +96,6 @@ class Settings:
     def increase_speed(self):
         """Increase speed settings."""
         self.alien_speed *= self.speedup_scale
+        self.alien_projectile_speed *= self.speedup_scale
 
         self.alien_points = int(self.alien_points * self.score_scale)

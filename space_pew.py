@@ -16,6 +16,7 @@ from button import Button
 from scoreboard import Scoreboard
 from wind import Wind
 from drops import Drops
+from alien_projectile import AlienProjectile
 
 class SpacePew:
     """Overall class to manage game assets and behavior."""
@@ -39,6 +40,7 @@ class SpacePew:
         self.aliens = pygame.sprite.Group()
         self.wind = pygame.sprite.Group()
         self.drops = pygame.sprite.Group()
+        self.projectiles = pygame.sprite.Group()
 
         # Make the Play button.
         self.play_button = Button(self, "Play")
@@ -265,6 +267,14 @@ class SpacePew:
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self._ship_hit()
 
+        # Random variable shooter
+        for alien in self.aliens:
+            if len(self.projectiles) < self.settings.alien_projectile_limit:
+                determine_num = randint(1, 100)
+                if determine_num < 10:
+                    new_projectile = AlienProjectile(self)
+                    self.projectiles.add(new_projectile)
+
         # Look for aliens hitting the bottom of the screen.
         self._check_alien_bottom()
     
@@ -363,6 +373,8 @@ class SpacePew:
             bullet.draw_bullet()
         for drop in self.drops.sprites():
             drop.draw_drop()
+        for projectile in self.projectiles.sprites():
+            projectile.draw_projectile()
         self.aliens.draw(self.screen)
 
         # Draw the score information.
