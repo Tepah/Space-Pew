@@ -13,6 +13,8 @@ class Bullet(Sprite):
         self.settings = sp_game.settings
         self.color = self.settings.bullet_color
 
+        self.pierce = sp_game.settings.bullet_pierce
+
         # Create a bullet rect at (0, 0) and then set correct position.
         self.rect = pygame.Rect(0, 0, self.settings.bullet_width, \
             self.settings.bullet_height)

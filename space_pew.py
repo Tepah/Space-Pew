@@ -229,7 +229,7 @@ class SpacePew:
             
     def _health_deplete(self, aliens, bullets, drop_determine):
         """
-        Checks if the alien health is depleted and deletes 
+        Checks if the alien health is depleted and deletes
         if health reaches 0
         """
         for alien in aliens:
@@ -245,8 +245,8 @@ class SpacePew:
                     bullets.settings.bullet_damage
             # Checks if bullets have pierce 
             # and how many times it can pierce
-            if bullets.settings.bullet_pierce > 0:
-                bullets.settings.bullet_pierce -= 1
+            if bullets.pierce > 0:
+                bullets.pierce -= 1
             else: 
                 # Deletes the bullet if it hits an alien with no pierce
                 self.bullets.remove(bullets)
@@ -257,13 +257,12 @@ class SpacePew:
                 self.drops.add(new_drop)
         
     def _respawn_aliens(self):
-        """Destroy existing bullets and create a new fleet."""
-        self.bullets.empty()
-        self._create_fleet()
-        self.settings.increase_speed()
+        """Destroy existing bul/proj/drops and create a new fleet."""
+        self._clean_slate()
 
-        # Increase level.
+        # Increase level and difficulty
         self.stats.level += 1
+        self.settings.increase_difficulty(self.stats.level)
         self.sb.prep_level()
 
     def _update_aliens(self):
@@ -280,12 +279,13 @@ class SpacePew:
         for alien in self.aliens:
             if len(self.projectiles) < self.settings.alien_projectile_limit:
                 determine_num = randint(1, 100)
-                if determine_num < 10 and \
+                if determine_num < 10 and\
                     self.settings.alien_projectile_counter %\
                     self.settings.alien_projectile_shoot == 0:
                     new_projectile = AlienProjectile(self, alien)
                     self.projectiles.add(new_projectile)
                 self.settings.alien_projectile_counter += 1
+    
         # Look for aliens hitting the bottom of the screen.
         self._check_alien_bottom()
     
@@ -370,7 +370,7 @@ class SpacePew:
 
     def _clean_slate(self):
         """Resets all aspects to reset positioning"""
-        # Get rid of any remaining aliens and bullets.
+        # Get rid of any remaining aliens, bullets, projectiles, and drops
         self.aliens.empty()
         self.bullets.empty()
         self.projectiles.empty()

@@ -37,7 +37,6 @@ class Settings:
         
         # Wind settings
         self.wind_height, self.wind_width = 80, 1
-        self.wind_speed = 1
         self.wind_limit = 5
         self.wind_counter = 0
 
@@ -46,6 +45,7 @@ class Settings:
     def initialize_dynamic_settings(self):
         """Initialize settings that change throughout the game."""
         self.bullet_speed = .8
+        self.wind_speed = .8
 
         # Alien dynamic variables
         self.alien_speed = .2
@@ -92,14 +92,18 @@ class Settings:
     def hard_mode_settings(self):
         """Change values to represent a harder mode."""
         self.alien_speed *= 2
-        self.speedup_scale = 1.3
+        self.speedup_scale = 1.1
         self.score_scale = 1.7
         self.alien_projectile_limit += 1
         self.alien_projectile_speed *= 1.5
 
-    def increase_speed(self):
+    def increase_difficulty(self, level):
         """Increase speed settings."""
         self.alien_speed *= self.speedup_scale
         self.alien_projectile_speed *= self.speedup_scale
+        self.wind_speed *= self.speedup_scale
+        if level % 2 == 0:
+            self.alien_projectile_limit += 1
+        self.alien_projectile_shoot -= round(self.alien_projectile_shoot * .1)
 
         self.alien_points = int(self.alien_points * self.score_scale)
