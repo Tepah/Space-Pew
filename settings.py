@@ -21,9 +21,10 @@ class Settings:
         # Alien settings:
         self.fleet_drop_speed = 10
         self.alien_bullet_size = 15
+        self.alien_projectile_counter = 1
 
         # Drop settings:
-        self.drop_size = 20
+        self.drop_size = 30
         self.drop_speed = .2
         self.upgrade_drop = (148, 223, 255)
 
@@ -50,7 +51,8 @@ class Settings:
         self.alien_speed = .2
         self.alien_health = 20
         self.alien_projectile_speed = .5
-         self.alien_projectile_limit = 3
+        self.alien_projectile_limit = 3
+        self.alien_projectile_shoot = 500
 
         # fleet_direction of 1 represents right; -1 represents left
         self.fleet_direction = 1
@@ -59,9 +61,9 @@ class Settings:
         self.alien_points = 50
 
     def switch_god_bullet(self):
-        if self.god_switch is -1:
+        if self.god_switch == -1:
             self.god_bullet()
-        elif self.god_switch is 1:
+        elif self.god_switch == 1:
             self.default_bullet()
             self.god_switch *= -1
 
@@ -87,11 +89,13 @@ class Settings:
         self.bullet_pierce = 20
         self.god_switch *= -1
 
-     def hard_mode_settings(self):
+    def hard_mode_settings(self):
         """Change values to represent a harder mode."""
         self.alien_speed *= 2
         self.speedup_scale = 1.3
         self.score_scale = 1.7
+        self.alien_projectile_limit += 1
+        self.alien_projectile_speed *= 1.5
 
     def increase_speed(self):
         """Increase speed settings."""

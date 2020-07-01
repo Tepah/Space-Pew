@@ -6,7 +6,7 @@ from pygame.sprite import Sprite
 class AlienProjectile(Sprite):
     """A class to manage bullets fired by aliens"""
 
-    def __init__(self, sp_game):
+    def __init__(self, sp_game, alien):
         """Create a AlienProjectile obj at the ship's location."""
         super().__init__()
         self.screen = sp_game.screen
@@ -18,7 +18,7 @@ class AlienProjectile(Sprite):
         self.rect = pygame.Rect (0, 0, \
             self.settings.alien_bullet_size, \
             self.settings.alien_bullet_size)
-        self.rect.midbottom = sp_game.alien.midbottom
+        self.rect.midbottom = alien.rect.midbottom
 
         # Store the bullet's position as a decimal
         self.y = float(self.rect.y)

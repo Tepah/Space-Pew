@@ -61,6 +61,8 @@ class SpacePew:
                     self._update_bullets()
                 if self.drops:
                     self._update_drops()
+                if self.projectiles:
+                    self._update_projectiles()
                 self._update_aliens()
                 if self.settings.spawn_ship:
                     self.ship.ship_spawn()
@@ -112,12 +114,7 @@ class SpacePew:
         self.stats.reset_stats()
         self.stats.game_active = True
 
-        # Get rid of any remaining aliens and bullets.
-        self.aliens.empty()
-        self.bullets.empty()
-
-        # Create a new flseet and center the ship.
-        self._create_fleet()
+        self._clean_slate()
         self.ship.ship_spawn()
         
         self.sb.prep_score()
@@ -201,6 +198,18 @@ class SpacePew:
             if drop.rect.top >= self.settings.screen_height:
                 self.drops.remove(drop)
 
+    def _update_projectiles(self):
+        """Moves the bullets down and deletes any that fall out"""
+        self.projectiles.update()
+
+        # Deletes the projectiles that fall out of screen
+        for projectile in self.projectiles.copy():
+            if projectile.rect.top >= self.settings.screen_height:
+                self.projectiles.remove(projectile)
+        
+        if pygame.sprite.spritecollideany(self.ship, self.projectiles):
+            self._ship_hit()
+
     def _check_bullet_alien_collisions(self):
         # Check for any bullets that have hit aliens.
         # If so, get rid of the bullet and the alien.
@@ -271,10 +280,12 @@ class SpacePew:
         for alien in self.aliens:
             if len(self.projectiles) < self.settings.alien_projectile_limit:
                 determine_num = randint(1, 100)
-                if determine_num < 10:
-                    new_projectile = AlienProjectile(self)
+                if determine_num < 10 and \
+                    self.settings.alien_projectile_counter %\
+                    self.settings.alien_projectile_shoot == 0:
+                    new_projectile = AlienProjectile(self, alien)
                     self.projectiles.add(new_projectile)
-
+                self.settings.alien_projectile_counter += 1
         # Look for aliens hitting the bottom of the screen.
         self._check_alien_bottom()
     
@@ -295,13 +306,7 @@ class SpacePew:
             self.stats.ships_left -= 1
             self.sb.prep_ships()
 
-            # Get rid of any remaining aliens and bullets.
-            self.aliens.empty()
-            self.bullets.empty()
-
-            # Create a new fleet and center the ship.
-            self._create_fleet()
-            self.settings.default_bullet()
+            self._clean_slate()
 
             # Pause.
             sleep(0.5)
@@ -362,6 +367,17 @@ class SpacePew:
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
+
+    def _clean_slate(self):
+        """Resets all aspects to reset positioning"""
+        # Get rid of any remaining aliens and bullets.
+        self.aliens.empty()
+        self.bullets.empty()
+        self.projectiles.empty()
+        self.drops.empty()
+
+        # Create a new fleet and center the ship.
+        self._create_fleet()
 
     def _update_screen(self):
         """Update images on screen and flips to new screen"""
