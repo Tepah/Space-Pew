@@ -13,7 +13,9 @@ class Bullet(Sprite):
         self.settings = sp_game.settings
         self.color = self.settings.bullet_color
 
+        # Sets the piercing values
         self.pierce = sp_game.settings.bullet_pierce
+        self.prev_alien = None
 
         # Create a bullet rect at (0, 0) and then set correct position.
         self.rect = pygame.Rect(0, 0, self.settings.bullet_width, \
@@ -34,5 +36,8 @@ class Bullet(Sprite):
         """Draw the bullet to the screen."""
         pygame.draw.rect(self.screen, self.color, self.rect)
 
+    def set_pierced_alien(self, alien):
+        """Sets an alien that was hit"""
+        self.prev_alien = alien
 
     

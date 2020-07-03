@@ -244,28 +244,32 @@ class SpacePew:
         if health reaches 0
         """
         for alien in aliens:
-            if alien.health - \
-                bullets.settings.bullet_damage <= 0:
-                self.aliens.remove(alien)
-                self.stats.score += self.settings.alien_points \
-                * len(aliens)
-                drop_determine = randint(1, 100)
-            else:
-                # Lowers the health if not quite at 0
-                alien.health -= \
-                    bullets.settings.bullet_damage
-            # Checks if bullets have pierce 
-            # and how many times it can pierce
-            if bullets.pierce > 0:
-                bullets.pierce -= 1
-            else: 
-                # Deletes the bullet if it hits an alien with no pierce
-                self.bullets.remove(bullets)
-            # Determines the drop rate for each item.
-            if drop_determine <= 5:
-                new_drop = Drops(self, alien)
-                new_drop.upgrade_drop()
-                self.drops.add(new_drop)
+            if bullets.prev_alien != alien:
+                if alien.health - \
+                    bullets.settings.bullet_damage <= 0:
+                    self.aliens.remove(alien)
+                    self.stats.score += self.settings.alien_points \
+                    * len(aliens)
+                    drop_determine = randint(1, 100)
+                else:
+                    # Lowers the health if not quite at 0
+                    alien.health -= \
+                        bullets.settings.bullet_damage
+                # Checks if bullets have pierce 
+                # and how many times it can pierce
+                if bullets.pierce > 0:
+                    bullets.pierce -= 1
+                    bullets.set_pierced_alien(alien)
+                else: 
+                    # Deletes the bullet if it hits an alien with no pierce
+                    self.bullets.remove(bullets)
+                # Determines the drop rate for each item.
+                if drop_determine <= 5:
+                    new_drop = Drops(self, alien)
+                    new_drop.upgrade_drop()
+                    self.drops.add(new_drop)
+                # TODO : increase pierce elif drop_determine <= 8:
+
         
     def _respawn_aliens(self):
         """Destroy existing bul/proj/drops and create a new fleet."""
