@@ -193,10 +193,21 @@ class SpacePew:
         # update drop position
         self.drops.update()
 
+        collided_drops = pygame.sprite.spritecollide(self.ship, self.drops, False\
+            )
+
+        for drop in collided_drops:
+            self._check_drop(drop)
+
         # Get rid of drops that are gone
         for drop in self.drops.copy():
             if drop.rect.top >= self.settings.screen_height:
                 self.drops.remove(drop)
+
+    def _check_drop(self, drop):
+        if drop.type == 'upgrade':
+            self.ship.upgrade_bullet()
+            self.drops.remove(drop)
 
     def _update_projectiles(self):
         """Moves the bullets down and deletes any that fall out"""

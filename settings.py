@@ -31,6 +31,7 @@ class Settings:
         # How quickly the game speeds up
         self.speedup_scale = 1.1
         self.difficulty_scale = 1.2
+        self.alien_health_spike = 1.2
 
         # How quickly the alien point values increase
         self.score_scale = 1.5
@@ -101,6 +102,8 @@ class Settings:
         """Increase speed settings."""
         self.alien_speed *= self.speedup_scale
         self.alien_projectile_speed *= self.speedup_scale
+        self.alien_health *= alien_health_spike
+        
         self.wind_speed *= self.speedup_scale
         if level % 2 == 0:
             self.alien_projectile_limit += 1

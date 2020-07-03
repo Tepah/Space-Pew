@@ -70,3 +70,7 @@ class Ship(Sprite):
             self.update()
         self.moving_up = False
         self.settings.ship_speed *= 2
+
+    def upgrade_bullet(self):
+        """Make a small incremental upgrade to bullets"""
+        self.settings.bullet_damage *= 1.1
