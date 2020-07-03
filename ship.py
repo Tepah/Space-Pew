@@ -74,3 +74,7 @@ class Ship(Sprite):
     def upgrade_bullet(self):
         """Make a small incremental upgrade to bullets"""
         self.settings.bullet_damage *= 1.1
+
+    def upgrade_pierece(self):
+        """Increases pierce mechanic"""
+        self.settings.bullet_pierce += 1

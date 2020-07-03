@@ -26,7 +26,8 @@ class Settings:
         # Drop settings:
         self.drop_size = 30
         self.drop_speed = .2
-        self.upgrade_drop = (148, 223, 255)
+        self.upgrade_drop_color = (148, 223, 255)
+        self.pierce_drop_color = (66, 245, 114)
 
         # How quickly the game speeds up
         self.speedup_scale = 1.1
@@ -77,7 +78,7 @@ class Settings:
         self.bullets_allowed = 5
         self.bullet_counter = 0
         self.bullet_damage = 10
-        self.bullet_pierce = 3
+        self.bullet_pierce = 0
         self.bullet_level = 1
         self.god_switch = -1
 
@@ -102,7 +103,6 @@ class Settings:
         """Increase speed settings."""
         self.alien_speed *= self.speedup_scale
         self.alien_projectile_speed *= self.speedup_scale
-        self.alien_health *= self.alien_health_spike
 
         self.wind_speed *= self.speedup_scale
         if level % 2 == 0:

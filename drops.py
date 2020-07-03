@@ -32,7 +32,10 @@ class Drops(Sprite):
     
     def upgrade_drop(self):
         """Defines the upgrade drop"""
-        self.color = self.settings.upgrade_drop
+        self.color = self.settings.upgrade_drop_color
         self.type = 'upgrade'
 
-    
+    def pierce_drop(self):
+        """Defines the upgrade drop"""
+        self.color = self.settings.pierce_drop_color
+        self.type = 'pierce'

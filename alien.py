@@ -42,6 +42,7 @@ class Alien(Sprite):
         self.rect.x = self.x
 
     def _set_health(self):
+        """Sets the health of the alien so that its scaled up"""
         self.health *= self.settings.difficulty_scale
         
     

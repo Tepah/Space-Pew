@@ -207,7 +207,10 @@ class SpacePew:
     def _check_drop(self, drop):
         if drop.type == 'upgrade':
             self.ship.upgrade_bullet()
-            self.drops.remove(drop)
+        elif drop.type == 'pierce':
+            self.ship.upgrade_pierece()
+
+        self.drops.remove(drop)
 
     def _update_projectiles(self):
         """Moves the bullets down and deletes any that fall out"""
@@ -226,7 +229,7 @@ class SpacePew:
         # If so, get rid of the bullet and the alien.
         collisions = pygame.sprite.groupcollide(\
             self.bullets, self.aliens, False, False)
-        drop_determine = 100
+        drop_determine = -1
 
         if collisions:
             for bullets, aliens in collisions.items():
@@ -244,6 +247,7 @@ class SpacePew:
         if health reaches 0
         """
         for alien in aliens:
+            # Checks if the bullet has hit this alien before.
             if bullets.prev_alien != alien:
                 if alien.health - \
                     bullets.settings.bullet_damage <= 0:
@@ -263,14 +267,20 @@ class SpacePew:
                 else: 
                     # Deletes the bullet if it hits an alien with no pierce
                     self.bullets.remove(bullets)
-                # Determines the drop rate for each item.
-                if drop_determine <= 5:
-                    new_drop = Drops(self, alien)
-                    new_drop.upgrade_drop()
-                    self.drops.add(new_drop)
-                # TODO : increase pierce elif drop_determine <= 8:
+                if drop_determine > 0:
+                    self._determine_drop(alien, drop_determine)
+                
+    def _determine_drop(self, alien, drop_determine):
+        # Determines the drop rate for each item.
+        if drop_determine <= 5:
+            new_drop = Drops(self, alien)
+            new_drop.upgrade_drop()
+            self.drops.add(new_drop)
+        elif drop_determine <= 7:
+            new_drop = Drops(self, alien)
+            new_drop.pierce_drop()
+            self.drops.add(new_drop)
 
-        
     def _respawn_aliens(self):
         """Destroy existing bul/proj/drops and create a new fleet."""
         self._clean_slate()
