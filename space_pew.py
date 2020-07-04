@@ -2,6 +2,7 @@
 
 # TODO: Add a limiting FPS
 import sys
+import os
 from time import sleep
 
 import pygame
@@ -431,8 +432,22 @@ class SpacePew:
 
         pygame.display.flip()
 
+def resource_path(relative_path):
+    try:
+    # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 if __name__ == "__main__":
     
+    asset_url = resource_path('images/ship.bmp')
+    hero_asset = pygame.image.load(asset_url)
+    asset_url = resource_path('images/ufo.bmp')
+    hero_asset = pygame.image.load(asset_url)
+
     # Make a game instance, and run the game.
     sp = SpacePew()
     sp.run_game()
