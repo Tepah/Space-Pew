@@ -443,10 +443,8 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 if __name__ == "__main__":
+    
     # Make a game instance, and run the game.
-    """sp = SpacePew()
-    sp.run_game()"""
-
-    asset_url = resource_path('OneDrive/Documents/GitHub/Space_Pew/images/ship.bmp')
-    ship_asset = pygame.image.load(asset_url)
+    sp = SpacePew()
+    sp.run_game()
 
