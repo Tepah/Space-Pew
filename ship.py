@@ -2,6 +2,8 @@
 import pygame
 from pygame.sprite import Sprite
 
+from setup import resource_path
+
 class Ship(Sprite):
     """The ship that the player controls"""
 
@@ -13,7 +15,8 @@ class Ship(Sprite):
         self.settings = ai_game.settings
 
         # Load the ship image and get its rect.
-        self.image = pygame.image.load('images/ship.bmp')
+        asset_url = resource_path('images/ship.bmp')
+        self.image = pygame.image.load(asset_url)
         self.rect = self.image.get_rect()
 
         # Start each new ship at the bottom center of the screen.

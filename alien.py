@@ -3,6 +3,8 @@
 import pygame
 from pygame.sprite import Sprite
 
+from setup import resource_path
+
 class Alien(Sprite):
     """A Class to represent a single alien in the fleet."""
     
@@ -19,7 +21,8 @@ class Alien(Sprite):
             self._set_health()
 
         # Load the alien image and set its rect attribute
-        self.image = pygame.image.load("images/ufo.bmp")
+        asset_url = resource_path('images/ufo.bmp')
+        self.image = pygame.image.load(asset_url)
         self.rect = self.image.get_rect()
 
         # Start each new alien near the top left of the screen.
