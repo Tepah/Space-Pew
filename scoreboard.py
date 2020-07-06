@@ -19,7 +19,7 @@ class Scoreboard:
 
         # Font settings for scoring information.
         self.text_color = (200, 200, 200)
-        self.font = pygame.font.SysFont(None, 48)
+        self.font = pygame.font.Font("fonts/Modak.ttf", 32)
 
         # Prepares the hud values
         self.prep_images()
