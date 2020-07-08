@@ -2,6 +2,8 @@
 
 import pygame.font
 
+from setup import resource_path
+
 class Button:
     """Creates a button"""
 
@@ -14,7 +16,8 @@ class Button:
         self.width, self.height = 150, 50
         self.button_color = (233, 206, 245)
         self.text_color = (255, 255, 255)
-        self.font = pygame.font.Font("fonts/Modak.ttf", 32)
+        asset_url = resource_path("fonts/Modak.ttf")
+        self.font = pygame.font.Font(asset_url, 32)
 
         # Build the button's rect object and center it.
         self.rect = pygame.Rect(0, 0, self.width, self.height)

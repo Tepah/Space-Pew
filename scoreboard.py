@@ -4,6 +4,8 @@ import pygame.font
 from pygame.sprite import Group
 import json
 
+from setup import resource_path
+
 from ship import Ship
 
 class Scoreboard:
@@ -19,7 +21,8 @@ class Scoreboard:
 
         # Font settings for scoring information.
         self.text_color = (200, 200, 200)
-        self.font = pygame.font.Font("fonts/Modak.ttf", 32)
+        asset_url = resource_path("fonts/Modak.ttf")
+        self.font = pygame.font.Font(asset_url, 32)
 
         # Prepares the hud values
         self.prep_images()
