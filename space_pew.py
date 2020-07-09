@@ -19,6 +19,7 @@ from wind import Wind
 from drops import Drops
 from alien_projectile import AlienProjectile
 
+
 class SpacePew:
     """Overall class to manage game assets and behavior."""
 
@@ -72,7 +73,7 @@ class SpacePew:
             self._blow_wind()
             self._update_wind()
             self._update_screen()
-    
+
     def _check_events(self):
         """Responds to keypresses and mouse events"""
         for event in pygame.event.get():
@@ -85,7 +86,7 @@ class SpacePew:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if not self.stats.game_active \
-                    and not self.stats.difficulty_menu:
+                        and not self.stats.difficulty_menu:
                     self._check_play_button(mouse_pos)
                 elif self.stats.difficulty_menu:
                     self._check_difficulty_menu(mouse_pos)
@@ -96,7 +97,7 @@ class SpacePew:
         if button_clicked:
             # Shows the difficulty buttons
             self.stats.difficulty_menu = True
-            
+
     def _check_difficulty_menu(self, mouse_pos):
         if self.normal_button.rect.collidepoint(mouse_pos):
             # Reset the game settings.
@@ -117,7 +118,7 @@ class SpacePew:
 
         self._clean_slate()
         self.ship.ship_spawn()
-        
+
         self.sb.prep_score()
         self.sb.prep_level()
         self.sb.prep_ships()
@@ -144,24 +145,24 @@ class SpacePew:
         elif event.key == pygame.K_p:
             if not self.stats.game_active:
                 self._start_game()
-        
+
     def _continue_shooting(self):
         if not self.ship.is_shooting:
             self.ship.is_shooting = True
         else:
             self.ship.is_shooting = False
-        
+
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed and \
-            self.ship.is_shooting and self.settings.bullet_counter % 100 == 0:
+                self.ship.is_shooting and self.settings.bullet_counter % 100 == 0:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
         self.settings.bullet_counter += 1
 
     def _blow_wind(self):
         if len(self.wind) < self.settings.wind_limit and \
-            self.settings.wind_counter % 300 == 0:
+                self.settings.wind_counter % 300 == 0:
             new_wind = Wind(self)
             self.wind.add(new_wind)
         self.settings.wind_counter += 1
@@ -194,8 +195,8 @@ class SpacePew:
         # update drop position
         self.drops.update()
 
-        collided_drops = pygame.sprite.spritecollide(self.ship, self.drops, False\
-            )
+        collided_drops = pygame.sprite.spritecollide(self.ship, self.drops, False
+                                                     )
 
         for drop in collided_drops:
             self._check_drop(drop)
@@ -209,8 +210,13 @@ class SpacePew:
         if drop.type == 'upgrade':
             self.ship.upgrade_bullet()
         elif drop.type == 'pierce':
-            self.ship.upgrade_pierece()
-
+            self.ship.upgrade_pierce()
+        elif drop.type == 'bigger':
+            self.ship.upgrade_bigger()
+        elif drop.type == 'smaller':
+            self.ship.upgrade_smaller()
+        elif drop.type == 'more':
+            self.ship.upgrade_amount()
         self.drops.remove(drop)
 
     def _update_projectiles(self):
@@ -221,14 +227,14 @@ class SpacePew:
         for projectile in self.projectiles.copy():
             if projectile.rect.top >= self.settings.screen_height:
                 self.projectiles.remove(projectile)
-        
+
         if pygame.sprite.spritecollideany(self.ship, self.projectiles):
             self._ship_hit()
 
     def _check_bullet_alien_collisions(self):
         # Check for any bullets that have hit aliens.
         # If so, get rid of the bullet and the alien.
-        collisions = pygame.sprite.groupcollide(\
+        collisions = pygame.sprite.groupcollide(
             self.bullets, self.aliens, False, False)
         drop_determine = -1
 
@@ -237,11 +243,11 @@ class SpacePew:
                 self._health_deplete(aliens, bullets, drop_determine)
             self.sb.prep_score()
             self.sb.check_high_score()
-        
+
         # Checks if aliens are all dead
         if not self.aliens and self.ship.rect.y >= 600:
             self._respawn_aliens()
-            
+
     def _health_deplete(self, aliens, bullets, drop_determine):
         """
         Checks if the alien health is depleted and deletes
@@ -251,35 +257,45 @@ class SpacePew:
             # Checks if the bullet has hit this alien before.
             if bullets.prev_alien != alien:
                 if alien.health - \
-                    bullets.settings.bullet_damage <= 0:
+                        bullets.settings.bullet_damage <= 0:
                     self.aliens.remove(alien)
                     self.stats.score += self.settings.alien_points \
-                    * len(aliens)
+                        * len(aliens)
                     drop_determine = randint(1, 100)
                 else:
                     # Lowers the health if not quite at 0
                     alien.health -= \
                         bullets.settings.bullet_damage
-                # Checks if bullets have pierce 
+                # Checks if bullets have pierce
                 # and how many times it can pierce
                 if bullets.pierce > 0:
                     bullets.pierce -= 1
                     bullets.set_pierced_alien(alien)
-                else: 
+                else:
                     # Deletes the bullet if it hits an alien with no pierce
                     self.bullets.remove(bullets)
                 if drop_determine > 0:
                     self._determine_drop(alien, drop_determine)
-                
+
     def _determine_drop(self, alien, drop_determine):
         # Determines the drop rate for each item.
-        if drop_determine <= 5:
+        if drop_determine <= 15:
             new_drop = Drops(self, alien)
-            new_drop.upgrade_drop()
-            self.drops.add(new_drop)
-        elif drop_determine <= 7:
-            new_drop = Drops(self, alien)
-            new_drop.pierce_drop()
+            if drop_determine <= 4:
+                # Drops the damage increase drop
+                new_drop.upgrade_drop()
+            elif drop_determine <= 6:
+                # Drops the pierce increase drop
+                new_drop.pierce_drop()
+            elif drop_determine <= 9:
+                # Drops the increasing size drop
+                new_drop.bigger_drop()
+            elif drop_determine <= 12:
+                # Drops the decreasing size drop
+                new_drop.smaller_drop()
+            elif drop_determine <= 15:
+                # Drop the increasing amount drop""
+                new_drop.more_drop()
             self.drops.add(new_drop)
 
     def _respawn_aliens(self):
@@ -306,15 +322,15 @@ class SpacePew:
             if len(self.projectiles) < self.settings.alien_projectile_limit:
                 determine_num = randint(1, 100)
                 if determine_num < 10 and\
-                    self.settings.alien_projectile_counter %\
-                    self.settings.alien_projectile_shoot == 0:
+                        self.settings.alien_projectile_counter %\
+                        self.settings.alien_projectile_shoot == 0:
                     new_projectile = AlienProjectile(self, alien)
                     self.projectiles.add(new_projectile)
                 self.settings.alien_projectile_counter += 1
-    
+
         # Look for aliens hitting the bottom of the screen.
         self._check_alien_bottom()
-    
+
     def _update_wind(self):
         """Update the position of the wind particles and gets rid of them"""
         self.wind.update()
@@ -353,8 +369,8 @@ class SpacePew:
 
         # Determine the number of rows of aliens that fit on the screen.
         ship_height = self.ship.rect.height
-        available_space_y = (self.settings.screen_height - \
-            (3 * alien_height) - ship_height)
+        available_space_y = (self.settings.screen_height -
+                             (3 * alien_height) - ship_height)
         number_rows = available_space_y // (3 * alien_height)
 
         # Create the full fleet of aliens.
@@ -432,22 +448,7 @@ class SpacePew:
 
         pygame.display.flip()
 
-def resource_path(relative_path):
-    try:
-    # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
-
 if __name__ == "__main__":
-    
-    asset_url = resource_path('images/ship.bmp')
-    hero_asset = pygame.image.load(asset_url)
-    asset_url = resource_path('images/ufo.bmp')
-    hero_asset = pygame.image.load(asset_url)
-
     # Make a game instance, and run the game.
     sp = SpacePew()
     sp.run_game()

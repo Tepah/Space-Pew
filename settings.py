@@ -28,6 +28,9 @@ class Settings:
         self.drop_speed = .2
         self.upgrade_drop_color = (148, 223, 255)
         self.pierce_drop_color = (66, 245, 114)
+        self.bigger_drop_color = (3, 53, 252)
+        self.smaller_drop_color = (252, 3, 3)
+        self.more_drop_color = (0, 0, 0)
 
         # How quickly the game speeds up
         self.speedup_scale = 1.1
@@ -75,7 +78,7 @@ class Settings:
         self.bullet_width = 5
         self.bullet_height = 35
         self.bullet_color = (255, 255, 255)
-        self.bullets_allowed = 5
+        self.bullets_allowed = 2
         self.bullet_counter = 0
         self.bullet_damage = 10
         self.bullet_pierce = 0

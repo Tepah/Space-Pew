@@ -39,3 +39,18 @@ class Drops(Sprite):
         """Defines the upgrade drop"""
         self.color = self.settings.pierce_drop_color
         self.type = 'pierce'
+
+    def bigger_drop(self):
+        """Defines the bigger bullet drop"""
+        self.color = self.settings.bigger_drop_color
+        self.type = 'bigger'
+    
+    def smaller_drop(self):
+        """Defines the smaller bullet drop"""
+        self.color = self.settings.smaller_drop_color
+        self.type = 'smaller'
+
+    def more_drop(self):
+        """Defines the more bullet drop"""
+        self.color = self.settings.more_drop_color
+        self.type = 'more'

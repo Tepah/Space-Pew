@@ -78,6 +78,20 @@ class Ship(Sprite):
         """Make a small incremental upgrade to bullets"""
         self.settings.bullet_damage *= 1.1
 
-    def upgrade_pierece(self):
-        """Increases pierce mechanic"""
+    def upgrade_pierce(self):
+        """Increases bullet pierce mechanic"""
         self.settings.bullet_pierce += 1
+
+    def upgrade_bigger(self):
+        """Increase the bullet size"""
+        self.settings.bullet_width *= 1.2
+        self.settings.bullet_height *= 1.2
+
+    def upgrade_smaller(self):
+        """Decrease the bullet size"""
+        self.settings.bullet_width *= .8
+        self.settings.bullet_height *= .8
+
+    def upgrade_amount(self):
+        """Increase the amount of bullets on screen"""
+        self.settings.bullets_allowed += 1
