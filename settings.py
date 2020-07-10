@@ -63,7 +63,7 @@ class Settings:
         self.alien_health = 20
         self.alien_projectile_speed = .3 * self.tick
         self.alien_projectile_limit = 3
-        self.alien_projectile_shoot = 500
+        self.alien_projectile_shoot = 180
 
         # fleet_direction of 1 represents right; -1 represents left
         self.fleet_direction = 1
