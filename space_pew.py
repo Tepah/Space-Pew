@@ -1,6 +1,5 @@
 """A minimalistic bullet hell"""
 
-# TODO: Add a limiting FPS
 import sys
 import os
 from time import sleep
@@ -43,6 +42,7 @@ class SpacePew:
         self.wind = pygame.sprite.Group()
         self.drops = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
+        self.clock = self.settings.clock
 
         # Make the Play button.
         self.play_button = Button(self, "Play")
@@ -54,6 +54,7 @@ class SpacePew:
     def run_game(self):
         """Start the main loop for the game."""
         while True:
+            self.clock.tick(self.settings.fps)
             self._check_events()
 
             if self.stats.game_active:
@@ -155,14 +156,14 @@ class SpacePew:
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed and \
-                self.ship.is_shooting and self.settings.bullet_counter % 100 == 0:
+                self.ship.is_shooting and self.settings.bullet_counter % 5 == 0:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
         self.settings.bullet_counter += 1
 
     def _blow_wind(self):
         if len(self.wind) < self.settings.wind_limit and \
-                self.settings.wind_counter % 300 == 0:
+                self.settings.wind_counter % 200 == 0:
             new_wind = Wind(self)
             self.wind.add(new_wind)
         self.settings.wind_counter += 1

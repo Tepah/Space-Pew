@@ -1,4 +1,5 @@
 """Setting class to store settings."""
+import pygame
 
 class Settings:
     """Class storing all settings for SP"""
@@ -10,8 +11,13 @@ class Settings:
         self.screen_height = 1000
         self.bg_color = (177, 155, 217)
 
+        # FPS settings:
+        self.fps = 60
+        self.clock = pygame.time.Clock()
+        self.tick = self.clock.tick(self.fps)
+
         # Ship settings:
-        self.ship_speed = .6
+        self.ship_speed = .4 * self.tick
         self.ship_limit = 2
         self.spawn_ship = True
 
@@ -19,13 +25,13 @@ class Settings:
         self.default_bullet()
 
         # Alien settings:
-        self.fleet_drop_speed = 10
+        self.fleet_drop_speed = 7
         self.alien_bullet_size = 15
         self.alien_projectile_counter = 1
 
         # Drop settings:
         self.drop_size = 30
-        self.drop_speed = .2
+        self.drop_speed = .15 * self.tick
         self.upgrade_drop_color = (148, 223, 255)
         self.pierce_drop_color = (66, 245, 114)
         self.bigger_drop_color = (3, 53, 252)
@@ -49,13 +55,13 @@ class Settings:
 
     def initialize_dynamic_settings(self):
         """Initialize settings that change throughout the game."""
-        self.bullet_speed = .8
-        self.wind_speed = .8
+        self.bullet_speed = .6 * self.tick
+        self.wind_speed = .6 * self.tick
 
         # Alien dynamic variables
-        self.alien_speed = .2
+        self.alien_speed = .15 * self.tick
         self.alien_health = 20
-        self.alien_projectile_speed = .5
+        self.alien_projectile_speed = .3 * self.tick
         self.alien_projectile_limit = 3
         self.alien_projectile_shoot = 500
 
@@ -66,6 +72,7 @@ class Settings:
         self.alien_points = 50
 
     def switch_god_bullet(self):
+        """changes if the god switch should be on or off"""
         if self.god_switch == -1:
             self.god_bullet()
         elif self.god_switch == 1:
@@ -87,7 +94,7 @@ class Settings:
 
     def god_bullet(self):
         """Changes bullets to GOD BULLETS"""
-        self.bullet_speed = 5
+        self.bullet_speed = 5 * self.tick
         self.bullet_width = 40
         self.bullet_height = 100
         self.bullet_damage = 99999
@@ -96,7 +103,7 @@ class Settings:
 
     def hard_mode_settings(self):
         """Change values to represent a harder mode."""
-        self.alien_speed *= 2
+        self.alien_speed *= 2 
         self.speedup_scale = 1.1
         self.score_scale = 1.7
         self.alien_projectile_limit += 1

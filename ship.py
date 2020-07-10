@@ -69,7 +69,7 @@ class Ship(Sprite):
 
         self.settings.ship_speed /= 2
         self.moving_up = True
-        while self.rect.y != self.spawn_position:
+        while self.rect.y > self.spawn_position:
             self.update()
         self.moving_up = False
         self.settings.ship_speed *= 2
